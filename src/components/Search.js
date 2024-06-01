@@ -25,19 +25,22 @@ const Search = () => {
       collection(db, "users"),
       where("displayName", "==", username)
     );
-
+    console.log(q);
     try {
       const querySnapshot = await getDocs(q);
+      console.log(querySnapshot);
       querySnapshot.forEach((doc) => {
         setUser(doc.data());
       });
     } catch (err) {
+      console.log(err);
       setErr(true);
     }
   };
 
   const handleKey = (e) => {
-    e.code === "Enter" && handleSearch();
+    setUsername(e.target.value)
+    handleSearch();
   };
 
   const handleSelect = async () => {
@@ -72,7 +75,7 @@ const Search = () => {
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
-    } catch (err) {}
+    } catch (err) { }
 
     setUser(null);
     setUsername("")
@@ -83,8 +86,7 @@ const Search = () => {
         <input
           type="text"
           placeholder="Find a user"
-          onKeyDown={handleKey}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => handleKey(e)}
           value={username}
         />
       </div>
